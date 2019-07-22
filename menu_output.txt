@@ -1,76 +1,76 @@
-vegetable, manchurian, 250
-paneer, chili, 325
-paneer, 65, 340
-paneer, manchurian, 340
-aloo, manchurian, 220
-vegetable, 65, 220
-onion, pakora, 175
-papad, masala, 60
-chicken, manchurian, 280
-chicken, chili, 280
-chicken, 65, 280
-chicken, majestic, 280
-egg, 65, 220
-egg, manchurian, 220
-egg, chili, 220
-fish, chili, 350
-fish, apollo, 350
-prawn, chili, 300
-prawn, manchurian, 300
-boiled egg, curry, 200
-boiled egg, masala, 200
-paneer, tikka masala, 300
-paneer, butter masala, 320
-paneer, methiwala, 320
-paneer, palak, 300
-paneer, shahi, 320
-paneer, kadai, 320
-paneer, mutter, 320
-aloo, gobi masala, 250
-aloo, mutter masala, 250
-vegetable, curry, 230
-vegetable, kolhapuri, 220
-vegetable, makhanwala, 250
-dal, tadka, 180
-dal, fry, 170
-tomato, masala, 220
-tomato, curry, 220
-chicken, tikka masala, 300
-chicken, methiwala, 300
-chicken, butter masala, 300
-chicken, curry, 270
-chicken, garlic curry, 300
-chicken, garlic masala, 300
-chicken, punjabi curry, 350
-chicken, punjabi masala, 350
-chicken, ginger curry, 300
-chicken, ginger masala, 300
-mutton, methiwala, 380
-mutton, saagwala, 380
-mutton, masala, 380
-mutton, rogan josh, 380
-mutton, curry, 380
-chicken, hyderabadi curry, 350
-chicken, hyderabadi masala, 350
-fish, curry, 350
-fish, masala, 350
-chicken, biryani, 250
-chicken, special biryani, 400
-mutton, biryani, 300
-mutton, special biryani, 450
-fish, biryani, 350
-prawn, biryani, 350
-egg, biryani, 230
-vegetable, biryani, 220
-dhesi khana, biryani, 300
-paneer, biryani, 350
-egg, fried rice, 200
-vegetable, fried rice, 200
-vegetable, special fried rice, 250
-jeera, rice, 200
-garlic, rice, 200
-rice, plain basmati, 200
-rice, plain biryani, 200
-chicken, tandoori, 450
-chicken, tikka, 350
-tangri, kebab, 500
+Vegetable Manchurian, 250
+Chili Paneer, 325
+Paneer 65, 340
+Paneer Manchurian, 340
+Aloo Manchurian, 220
+Vegetable 65, 220
+Onion Pakora, 175
+Masala Papad, 60
+Chicken Manchurian, 280
+Chili Chicken 280
+Chicken 65, 280
+Chicken Majestic, 280
+Egg 65, 220
+Egg Manchurian, 220
+Chili Egg, 220
+Chili Fish, 350
+Apollo Fish, 350
+Chili Prawn, 300
+Prawn Manchurian, 300
+Boiled Egg Curry, 200
+Boiled Egg Masala, 200
+Paneer Tikka Masala, 300
+Paneer Butter Masala, 320
+Paneer Methiwala, 320
+Paneer Palak, 300
+Paneer Shahi, 320
+Paneer Kadai, 320
+Paneer Mutter, 320
+Aloo Gobi Masala, 250
+Aloo Mutter Masala, 250
+Vegetable Curry, 230
+Vegetable Kolhapuri, 220
+Vegetable Makhanwala, 250
+Dal Tadka, 180
+Dal Fry, 170
+Tomato Masala, 220
+Tomato Curry, 220
+Chicken Tikka Masala, 300
+Chicken Methiwala, 300
+Chicken Butter Masala, 300
+Chicken Curry, 270
+Garlic Chicken Curry, 300
+Garlic Chicken Masala, 300
+Punjabi Chicken Curry, 350
+Punjabi Chicken Masala, 350
+Ginger Chicken Curry, 300
+Ginger Chicken Masala, 300
+Mutton Methiwala, 380
+Mutton Saagwala, 380
+Mutton Masala, 380
+Mutton Rogan Josh, 380
+Mutton Curry, 380
+Chicken Hyderabadi Curry, 350
+Chicken Hyderabadi Masala, 350
+Fish Curry, 350
+Fish Masala, 350
+Chicken Biryani, 250
+Chicken Special Biryani, 400
+Mutton Biryani, 300
+Mutton Special Biryani, 450
+Fish Biryani, 350
+Prawn Biryani, 350
+Egg Biryani, 230
+Vegetable Biryani, 220
+Dhesi Khana Biryani, 300
+Paneer Biryani, 350
+Egg Fried Rice, 200
+Vegetable Fried Rice, 200
+Vegetable Special Fried Rice, 250
+Jeera Rice, 200
+Garlic Rice, 200
+Plain Basmati Rice, 200
+Plain Biryani Rice, 200
+Chicken Tandoori, 450
+Chicken Tikka, 350
+Tangri Kebab, 500

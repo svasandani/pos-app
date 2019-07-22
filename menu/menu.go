@@ -7,13 +7,12 @@ import (
   "log"
   // "os"
   "strings"
-  // "strconv"
+  "strconv"
 )
 
 type Dish struct {
   SKU int `json:"sku"`
-  Content string `json:"content"`
-  Cooking_style string `json:"cooking_style"`
+  Name string `json:"name"`
   Price string `json:"price"`
 }
 
@@ -46,7 +45,7 @@ func getMenuFromFile() {
       menuitem[i] = strings.TrimSpace(string)
     }
 
-    dish := Dish {SKU: getSKU(), Content: menuitem[0], Cooking_style: menuitem[1], Price: menuitem[2],}
+    dish := Dish {SKU: getSKU(), Name: menuitem[0], Price: menuitem[1],}
 
     Menu = append(Menu, dish)
   }
@@ -56,12 +55,21 @@ func writeMenuToFile() {
   output := ""
 
   for _, item := range(Menu) {
-    output += fmt.Sprintf("%v, %v, %v\n", item.Content, item.Cooking_style, item.Price)
+    output += fmt.Sprintf("%v, %v\n", item.Name, item.Price)
   }
 
   bytes := []byte(output)
 
   ioutil.WriteFile(filename, bytes, 0644)
+}
+
+func DishFromSKU(sku int) Dish {
+  return Menu[sku-1]
+}
+
+func PriceFromSKU(sku int) int {
+  price, _ := strconv.ParseInt(Menu[sku-1].Price, 10, 0)
+  return int(price)
 }
 
 // func intToString(int int) string {
@@ -78,7 +86,7 @@ func GetMenu() []Dish {
   return Menu
 }
 
-func AddMenuItem(contents string, cooking_style string, price string) {
+func AddMenuItem(name string, price string) {
   // f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
   // defer f.Close()
   //
@@ -93,7 +101,7 @@ func AddMenuItem(contents string, cooking_style string, price string) {
   // }
   getMenuFromFile()
 
-  menuitem := Dish {SKU: getSKU(), Content: contents, Cooking_style: cooking_style, Price: price}
+  menuitem := Dish {SKU: getSKU(), Name: name, Price: price}
 
   Menu = append(Menu, menuitem)
 
@@ -108,16 +116,13 @@ func DeleteMenuItem(sku int) {
   writeMenuToFile()
 }
 
-func EditMenuItem(sku int, contents string, cooking_style string, price string) {
+func EditMenuItem(sku int, name string, price string) {
   getMenuFromFile()
 
   dish := &Menu[sku-1]
 
-  if contents != "" {
-    dish.Content = contents
-  }
-  if cooking_style != "" {
-    dish.Cooking_style = cooking_style
+  if name != "" {
+    dish.Name = name
   }
   if price != "" {
     dish.Price = price
