@@ -7,16 +7,27 @@ import (
   "log"
   // "os"
   "strings"
-  "strconv"
+  // "strconv"
 )
 
-var menu [][]string
+type Dish struct {
+  SKU int `json:"sku"`
+  Content string `json:"content"`
+  Cooking_style string `json:"cooking_style"`
+  Price string `json:"price"`
+}
+
+var Menu []Dish
 var sku int = 0;
 var filename string = "./menu_output.txt"
 
+func init() {
+  getMenuFromFile()
+}
+
 func getMenuFromFile() {
-  sku = 1
-  menu = nil
+  sku = 0;
+  Menu = nil
 
   content, err := ioutil.ReadFile(filename)
 
@@ -28,22 +39,24 @@ func getMenuFromFile() {
 
   for _, item := range(result) {
     menuitem := strings.Split(item, ",")
-    if len(menuitem) < 1 {continue;}
+
+    if len(menuitem) < 2 {continue;}
+
     for i, string := range(menuitem) {
       menuitem[i] = strings.TrimSpace(string)
     }
-    menuitem = append([]string{intToString(getSKU())}, menuitem...)
-    if len(menuitem) > 2 {
-      menu = append(menu, menuitem)
-    }
+
+    dish := Dish {SKU: getSKU(), Content: menuitem[0], Cooking_style: menuitem[1], Price: menuitem[2],}
+
+    Menu = append(Menu, dish)
   }
 }
 
 func writeMenuToFile() {
   output := ""
 
-  for _, item := range(menu) {
-    output += fmt.Sprintf("%v, %v, %v\n", item[1], item[2], item[3])
+  for _, item := range(Menu) {
+    output += fmt.Sprintf("%v, %v, %v\n", item.Content, item.Cooking_style, item.Price)
   }
 
   bytes := []byte(output)
@@ -51,18 +64,18 @@ func writeMenuToFile() {
   ioutil.WriteFile(filename, bytes, 0644)
 }
 
-func intToString(int int) string {
-  return strconv.FormatInt(int64(int), 10)
-}
+// func intToString(int int) string {
+//   return strconv.FormatInt(int64(int), 10)
+// }
 
 func getSKU() int {
   sku++
   return sku
 }
 
-func GetMenu() [][]string {
+func GetMenu() []Dish {
   getMenuFromFile()
-  return menu
+  return Menu
 }
 
 func AddMenuItem(contents string, cooking_style string, price string) {
@@ -80,9 +93,9 @@ func AddMenuItem(contents string, cooking_style string, price string) {
   // }
   getMenuFromFile()
 
-  menuitem := []string{intToString(getSKU()), contents, cooking_style, price}
+  menuitem := Dish {SKU: getSKU(), Content: contents, Cooking_style: cooking_style, Price: price}
 
-  menu = append(menu, menuitem)
+  Menu = append(Menu, menuitem)
 
   writeMenuToFile()
 }
@@ -90,7 +103,7 @@ func AddMenuItem(contents string, cooking_style string, price string) {
 func DeleteMenuItem(sku int) {
   getMenuFromFile()
 
-  menu = append(menu[:sku-1], menu[sku:]...)
+  Menu = append(Menu[:sku-1], Menu[sku:]...)
 
   writeMenuToFile()
 }
@@ -98,16 +111,16 @@ func DeleteMenuItem(sku int) {
 func EditMenuItem(sku int, contents string, cooking_style string, price string) {
   getMenuFromFile()
 
-  menuitem := menu[sku-1]
+  dish := &Menu[sku-1]
 
   if contents != "" {
-    menuitem[1] = contents
+    dish.Content = contents
   }
   if cooking_style != "" {
-    menuitem[2] = cooking_style
+    dish.Cooking_style = cooking_style
   }
   if price != "" {
-    menuitem[3] = price
+    dish.Price = price
   }
 
   writeMenuToFile()

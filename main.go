@@ -19,11 +19,23 @@ func main() {
   // menufile = menu.GetMenu()
   // fmt.Println(menufile)
   //
-  // menu.EditMenuItem(77, "", "", "350")
+  // menu.EditMenuItem(76, "", "", "350")
   // // menu.AddMenuItem("chicken", "masala", "250")
   // menufile = menu.GetMenu()
   // fmt.Println(menufile)
+  // fmt.Println(menu.Menu)
 
-  fmt.Println(transaction.NewTransaction())
+  // test := transaction.NewTransaction()
+  //
+  // fmt.Println(test)
+  //
+  // transaction.AddDish(&test, 76)
+  //
+  // fmt.Println(test)
+  //
+  // transaction.ServeDish(&test, 0)
+  //
+  // fmt.Println(test)
+  // fmt.Println(transaction.GetTotal(&test))
 
 }
