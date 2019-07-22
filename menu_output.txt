@@ -74,4 +74,3 @@ rice, plain biryani, 200
 chicken, tandoori, 450
 chicken, tikka, 350
 tangri, kebab, 500
-chicken, masala, 250
