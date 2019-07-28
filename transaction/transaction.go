@@ -4,7 +4,9 @@ import (
   "fmt"
   "time"
   // "strconv"
+  "io/ioutil"
   "os"
+  "path/filepath"
   "io"
   "strings"
 
@@ -24,7 +26,10 @@ type Transaction struct {
 }
 
 func writeTransactionToDisk(transaction *Transaction) {
-  filename := "./transaction_history/" + transaction.ID + ".transaction"
+  datestring := time.Now().Format("060201")
+  newpath := filepath.Join("./transaction_history/", datestring)
+  os.MkdirAll(newpath, os.ModePerm)
+  filename := "./transaction_history/" + datestring + "/" + transaction.ID + ".transaction"
 
   file, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE, 0755)
 
@@ -89,4 +94,54 @@ func Pay(transaction *Transaction, method string) {
   transaction.Payment_method = method
 
   writeTransactionToDisk(transaction)
+}
+
+func GetSalesReport() {
+  datestring := time.Now().Format("060201")
+  root, _ := filepath.Abs("./transaction_history/" + datestring + "/")
+
+  transactionmap := make(map[string]int)
+
+  isroot := true
+  numtransactions := 0
+
+  err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+    if isroot {
+      isroot = false
+      return nil
+    }
+
+    numtransactions++
+
+    content, _ := ioutil.ReadFile(path)
+    blocks := strings.Split(string(content), "\n\n\n")
+    results := strings.Split(blocks[0], "\n")
+
+    for _, string := range(results) {
+      string = strings.TrimSpace(string)
+    }
+    results = results[4:]
+
+    for _, string := range(results) {
+      transactionmap[strings.Split(string, " ")[0]]++
+    }
+
+    // var transactions []string
+    // for _, string := range(results) {
+    //   transactions = append(transactions, strings.Split(string, " ")[0])
+    // }
+    //
+    // for _, sku := range(transactions) {
+    //   transactionmap[sku]++
+    // }
+
+    return nil
+  })
+
+  fmt.Println(transactionmap)
+
+  if err != nil {
+    panic(err)
+  }
+
 }

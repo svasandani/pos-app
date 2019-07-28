@@ -7,7 +7,7 @@ Vegetable 65, 220
 Onion Pakora, 175
 Masala Papad, 60
 Chicken Manchurian, 280
-Chili Chicken 280
+Chili Chicken, 280
 Chicken 65, 280
 Chicken Majestic, 280
 Egg 65, 220

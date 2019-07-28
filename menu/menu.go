@@ -8,6 +8,9 @@ import (
   // "os"
   "strings"
   "strconv"
+  "sync"
+
+  poslog "github.com/svasandani/pos-app/log"
 )
 
 type Dish struct {
@@ -19,12 +22,16 @@ type Dish struct {
 var Menu []Dish
 var sku int = 0;
 var filename string = "./menu_output.txt"
+var mtx sync.RWMutex
 
 func init() {
   getMenuFromFile()
 }
 
 func getMenuFromFile() {
+  // mtx.Lock()
+  // defer mtx.Unlock()
+
   sku = 0;
   Menu = nil
 
@@ -52,6 +59,9 @@ func getMenuFromFile() {
 }
 
 func writeMenuToFile() {
+  // mtx.Lock()
+  // defer mtx.Unlock()
+
   output := ""
 
   for _, item := range(Menu) {
@@ -86,7 +96,10 @@ func GetMenu() []Dish {
   return Menu
 }
 
-func AddMenuItem(name string, price string) {
+func AddMenuItem(server string, name string, price string) string {
+  // mtx.Lock()
+  // defer mtx.Unlock()
+
   // f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
   // defer f.Close()
   //
@@ -106,18 +119,41 @@ func AddMenuItem(name string, price string) {
   Menu = append(Menu, menuitem)
 
   writeMenuToFile()
+
+  action := fmt.Sprintf("Added dish %v", menuitem)
+
+  poslog.Log(server, action)
+
+  return action
 }
 
-func DeleteMenuItem(sku int) {
+func DeleteMenuItem(server string, sku int) string {
+  // mtx.Lock()
+  // defer mtx.Unlock()
+
   getMenuFromFile()
+
+  fmt.Println(sku)
+  menuitem := DishFromSKU(sku)
 
   Menu = append(Menu[:sku-1], Menu[sku:]...)
 
   writeMenuToFile()
+
+  action := fmt.Sprintf("Deleted dish %v", menuitem)
+
+  poslog.Log(server, action)
+
+  return action
 }
 
-func EditMenuItem(sku int, name string, price string) {
+func EditMenuItem(server string, sku int, name string, price string) string {
+  // mtx.Lock()
+  // defer mtx.Unlock()
+
   getMenuFromFile()
+
+  menuitem := DishFromSKU(sku)
 
   dish := &Menu[sku-1]
 
@@ -128,5 +164,13 @@ func EditMenuItem(sku int, name string, price string) {
     dish.Price = price
   }
 
+  editedmenuitem := DishFromSKU(sku)
+
   writeMenuToFile()
+
+  action := fmt.Sprintf("Edited dish %v to be %v", menuitem, editedmenuitem)
+
+  poslog.Log(server, action)
+
+  return action
 }
