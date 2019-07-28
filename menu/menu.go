@@ -133,7 +133,6 @@ func DeleteMenuItem(server string, sku int) string {
 
   getMenuFromFile()
 
-  fmt.Println(sku)
   menuitem := DishFromSKU(sku)
 
   Menu = append(Menu[:sku-1], Menu[sku:]...)

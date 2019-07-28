@@ -12,6 +12,7 @@ import (
 
   "github.com/rs/xid"
   "github.com/svasandani/pos-app/menu"
+  poslog "github.com/svasandani/pos-app/log"
 )
 
 type Transaction struct {
@@ -27,18 +28,18 @@ type Transaction struct {
 
 var transactionList []Transaction
 
-func transactionFromID(id string) Transaction {
-  for _, item := range(transactionList) {
+func transactionFromID(id string) int {
+  for index, item := range(transactionList) {
     if item.ID == id {
-      return item
+      return index
     }
   }
 
-  return Transaction {ID: "", Date: "", Server: "", Payment_method: "", SKUList: []int{}, CompletedList: []bool{}, Total: 0}
+  return -1
 }
 
 func writeTransactionToDisk(transactionid string) {
-  transaction := transactionFromID(transactionid)
+  transaction := &transactionList[transactionFromID(transactionid)]
 
   datestring := time.Now().Format("060201")
   newpath := filepath.Join("./transaction_history/", datestring)
@@ -72,73 +73,97 @@ func writeTransactionToDisk(transactionid string) {
 //   return Transaction {ID: xid.New().String(), Date: time.Now().Format("Jan-02-2006 3:04:05 PM"), Server: "", Payment_method: "", SKUList: []int{}, CompletedList: []bool{}, Total: 0}
 // }
 
-func NewTransaction() string {
-  transactionList = append(transactionList, Transaction {ID: xid.New().String(), Date: time.Now().Format("Jan-02-2006 3:04:05 PM"), Server: servername, Payment_method: "", SKUList: []int{}, CompletedList: []bool{}, Total: 0})
+func NewTransaction(servername string) string {
+  id := xid.New().String()
+
+  transactionList = append(transactionList, Transaction {ID: id, Date: time.Now().Format("Jan-02-2006 3:04:05 PM"), Server: servername, Payment_method: "", SKUList: []int{}, CompletedList: []bool{}, Total: 0})
+
+  return id
 }
 
-func AddDish(transactionid string, sku int) {
-  transaction := transactionFromID(transactionid)
+func AddDish(transactionid string, sku int) string {
+  transaction := &transactionList[transactionFromID(transactionid)]
 
   transaction.SKUList = append(transaction.SKUList, sku)
   transaction.CompletedList = append(transaction.CompletedList, false)
+
+  fmt.Println(transaction)
+
+  return menu.DishFromSKU(sku).Name
 }
 
-func DeleteDish(transactionid string, index int) {
-  transaction := transactionFromID(transactionid)
+func DeleteDish(transactionid string, index int) string {
+  transaction := &transactionList[transactionFromID(transactionid)]
+
+  sku := transaction.SKUList[index]
 
   transaction.SKUList = append(transaction.SKUList[:index], transaction.SKUList[index-1:]...)
   transaction.CompletedList = append(transaction.CompletedList[:index], transaction.CompletedList[index-1:]...)
+
+  fmt.Println(transaction)
+
+  return menu.DishFromSKU(sku).Name
 }
 
 func setCompletedStatus(transactionid string, index int, value bool) {
-  transaction := transactionFromID(transactionid)
+  transaction := &transactionList[transactionFromID(transactionid)]
 
   transaction.CompletedList[index] = value;
 }
 
-func ToggleServe(transactionid string, index int) {
-  transaction := transactionFromID(transactionid)
+func ToggleServe(transactionid string, index int) string {
+  transaction := &transactionList[transactionFromID(transactionid)]
 
   if transaction.CompletedList[index] {
     UnserveDish(transactionid, index)
+    fmt.Println(transaction)
+
+    return fmt.Sprintf("Unserved %v", menu.DishFromSKU(transaction.SKUList[index]).Name)
   } else {
     ServeDish(transactionid, index)
+    fmt.Println(transaction)
+
+    return fmt.Sprintf("Served %v", menu.DishFromSKU(transaction.SKUList[index]).Name)
   }
 }
 
 func ServeDish(transactionid string, index int) {
-  transaction := transactionFromID(transactionid)
+  transaction := &transactionList[transactionFromID(transactionid)]
 
-  setCompletedStatus(transaction, index, true)
+  setCompletedStatus(transaction.ID, index, true)
   dishprice := menu.PriceFromSKU(transaction.SKUList[index])
 
   transaction.Total += dishprice
 }
 
 func UnserveDish(transactionid string, index int) {
-  transaction := transactionFromID(transactionid)
+  transaction := &transactionList[transactionFromID(transactionid)]
 
-  setCompletedStatus(transaction, index, false)
+  setCompletedStatus(transaction.ID, index, false)
   dishprice := menu.PriceFromSKU(transaction.SKUList[index])
 
   transaction.Total -= dishprice
 }
 
-func Pay(transactionid string, method string) Transaction {
-  transaction := transactionFromID(transactionid)
+func Pay(transactionid string, method string) *Transaction {
+  transaction := &transactionList[transactionFromID(transactionid)]
 
   if strings.ToLower(method) != "card" && strings.ToLower(method) != "cash" {
-    return
+    return &Transaction {ID: "", Date: "", Server: "", Payment_method: "", SKUList: []int{}, CompletedList: []bool{}, Total: 0}
   }
 
   transaction.Payment_method = method
 
-  writeTransactionToDisk(transaction)
+  writeTransactionToDisk(transaction.ID)
 
+  action := fmt.Sprintf("Paid transaction id %v by %v", transactionid, method)
+  poslog.Log(transaction.Server, action)
+
+  // return fmt.Sprintf("Paid transaction id %v by %v", transactionid, method)
   return transaction
 }
 
-func GetSalesReport() {
+func GetSalesReport() string {
   datestring := time.Now().Format("060201")
   root, _ := filepath.Abs("./transaction_history/" + datestring + "/")
 
@@ -185,5 +210,7 @@ func GetSalesReport() {
   if err != nil {
     panic(err)
   }
+
+  return "transactionmap"
 
 }

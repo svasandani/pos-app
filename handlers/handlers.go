@@ -5,10 +5,11 @@ import (
   "encoding/json"
   "io"
   "io/ioutil"
+  "strconv"
 
   "github.com/svasandani/pos-app/menu"
   "github.com/svasandani/pos-app/server"
-  // "github.com/svasandani/pos-app/transaction"
+  "github.com/svasandani/pos-app/transaction"
 )
 
 func setupResponse(w *http.ResponseWriter, r *http.Request) {
@@ -198,4 +199,100 @@ func convertJSONToServer(jsonBody []byte) (server.Server, error) {
   }
 
   return serveritem, nil
+}
+
+func TransactionNewHandler(w http.ResponseWriter, r *http.Request) {
+  setupResponse(&w, r)
+
+  serverid := r.FormValue("server")
+
+  servername := server.CheckServer(serverid)
+
+  if servername == "" {
+    http.Error(w, "Server not found", http.StatusUnauthorized)
+    return
+  }
+
+  encoder := json.NewEncoder(w)
+
+  if err := encoder.Encode(transaction.NewTransaction(servername)); err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+}
+
+func TransactionAddDishHandler(w http.ResponseWriter, r *http.Request) {
+  setupResponse(&w, r)
+
+  id := r.FormValue("id")
+  s, _ := strconv.ParseInt(r.FormValue("sku"), 10, 0)
+  sku := int(s)
+
+  encoder := json.NewEncoder(w)
+
+  if err := encoder.Encode(transaction.AddDish(id, sku)); err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+}
+
+func TransactionDeleteDishHandler(w http.ResponseWriter, r *http.Request) {
+  setupResponse(&w, r)
+
+  id := r.FormValue("id")
+  i, _ := strconv.ParseInt(r.FormValue("index"), 10, 0)
+  index := int(i)
+
+  encoder := json.NewEncoder(w)
+
+  if err := encoder.Encode(transaction.DeleteDish(id, index)); err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+}
+
+func TransactionServerHandler(w http.ResponseWriter, r *http.Request) {
+  setupResponse(&w, r)
+
+  id := r.FormValue("id")
+  i, _ := strconv.ParseInt(r.FormValue("index"), 10, 0)
+  index := int(i)
+
+  encoder := json.NewEncoder(w)
+
+  if err := encoder.Encode(transaction.ToggleServe(id, index)); err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+}
+
+func TransactionPayHandler(w http.ResponseWriter, r *http.Request) {
+  setupResponse(&w, r)
+
+  id := r.FormValue("id")
+  method := r.FormValue("method")
+
+  encoder := json.NewEncoder(w)
+
+  if err := encoder.Encode(transaction.Pay(id, method)); err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+}
+
+func convertHTTPToTransaction(httpBody io.ReadCloser) (transaction.Transaction, error) {
+  body, err := ioutil.ReadAll(httpBody)
+
+  if err != nil {
+    return transaction.Transaction{}, err
+  }
+
+  defer httpBody.Close()
+  return convertJSONToTransaction(body)
+}
+
+func convertJSONToTransaction(jsonBody []byte) (transaction.Transaction, error) {
+  var transactionitem transaction.Transaction
+  err := json.Unmarshal(jsonBody, &transactionitem)
+
+  if err != nil {
+    return transaction.Transaction{}, err
+  }
+
+  return transactionitem, nil
 }
