@@ -18,14 +18,14 @@ func main() {
   mux.HandleFunc("/menu", handlers.MenuDeleteHandler).Methods("DELETE")
   mux.HandleFunc("/menu", handlers.MenuEditHandler).Methods("PUT")
 
-  // mux.HandleFunc("/transaction", handlers.TransactionNewHandler).Methods("GET")
-  // mux.HandleFunc("/transaction", handlers.TransactionAddDishHandler).Methods("POST")
-  // mux.HandleFunc("/transaction", handlers.TransactionDeleteDishHandler).Methods("DELETE")
-  // mux.HandleFunc("/transaction", handlers.TransactionServerHandler).Methods("PUT")
+  mux.HandleFunc("/transaction", handlers.TransactionNewHandler).Methods("GET")
+  mux.HandleFunc("/transaction", handlers.TransactionAddDishHandler).Methods("POST")
+  mux.HandleFunc("/transaction", handlers.TransactionDeleteDishHandler).Methods("DELETE")
+  mux.HandleFunc("/transaction", handlers.TransactionServerHandler).Methods("PUT")
+  mux.HandleFunc("/transaction/pay", handlers.TransactionPayHandler).Methods("POST")
   //
-  // mux.HandleFunc("/server", handlers.ServerCheckHandler).Methods("GET")
-  // mux.HandleFunc("/server", handlers.ServerAddHandler).Methods("POST")
-  // mux.HandleFunc("/server", handlers.ServerDeleteHandler).Methods("DELETE")
+  mux.HandleFunc("/server", handlers.ServerAddHandler).Methods("POST")
+  mux.HandleFunc("/server", handlers.ServerDeleteHandler).Methods("DELETE")
 
   n := negroni.Classic()
   n.UseHandler(mux)

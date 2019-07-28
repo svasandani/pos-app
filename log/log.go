@@ -6,12 +6,9 @@ import (
   // "strconv"
   "os"
   "io"
-
-  "github.com/svasandani/pos-app/server"
 )
 
 func Log(servername string, action string) {
-  server := server.FindServerByName(servername)
   datestring := time.Now().Format("060201")
   filename := "./log_history/" + datestring + ".log"
 
@@ -21,7 +18,7 @@ func Log(servername string, action string) {
     panic(err)
   }
 
-  output := fmt.Sprintf("Server: %v, Date: %v, Action: %v\n", server.Name, datestring, action)
+  output := fmt.Sprintf("Server: %v, Date: %v, Action: %v\n", servername, datestring, action)
 
   _, err = io.WriteString(file, output)
 

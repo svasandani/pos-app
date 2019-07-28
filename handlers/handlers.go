@@ -143,3 +143,59 @@ func convertJSONToDish(jsonBody []byte) (menu.Dish, error) {
 
   return dish, nil
 }
+
+func ServerAddHandler(w http.ResponseWriter, r *http.Request) {
+  setupResponse(&w, r)
+  defer r.Body.Close()
+
+  serverobject, err := convertHTTPToServer(r.Body)
+
+  if err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+
+  encoder := json.NewEncoder(w)
+
+  if err := encoder.Encode(server.AddNewServer(serverobject.Name)); err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+}
+
+func ServerDeleteHandler(w http.ResponseWriter, r *http.Request) {
+  setupResponse(&w, r)
+  defer r.Body.Close()
+
+  serverobject, err := convertHTTPToServer(r.Body)
+
+  if err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+
+  encoder := json.NewEncoder(w)
+
+  if err := encoder.Encode(server.RemoveServer(serverobject.ID)); err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+}
+
+func convertHTTPToServer(httpBody io.ReadCloser) (server.Server, error) {
+  body, err := ioutil.ReadAll(httpBody)
+
+  if err != nil {
+    return server.Server{}, err
+  }
+
+  defer httpBody.Close()
+  return convertJSONToServer(body)
+}
+
+func convertJSONToServer(jsonBody []byte) (server.Server, error) {
+  var serveritem server.Server
+  err := json.Unmarshal(jsonBody, &serveritem)
+
+  if err != nil {
+    return server.Server{}, err
+  }
+
+  return serveritem, nil
+}
