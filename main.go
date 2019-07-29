@@ -11,20 +11,28 @@ func main() {
   // var err error
   mux := gmux.NewRouter()
 
+  // mux.HandleFunc("/*", handlers.OptionsHandler).Methods("OPTIONS")
+
+  // localhost:2000/login?user=#####&id=#####
   mux.HandleFunc("/login", handlers.LoginHandler)
 
+  // localhost:2000/menu?server=##### (with json body)
   mux.HandleFunc("/menu", handlers.MenuGetHandler).Methods("GET")
   mux.HandleFunc("/menu", handlers.MenuAddHandler).Methods("POST")
   mux.HandleFunc("/menu", handlers.MenuDeleteHandler).Methods("DELETE")
   mux.HandleFunc("/menu", handlers.MenuEditHandler).Methods("PUT")
 
+  // localhost:2000/transaction/new?server=#####
+  // localhost:2000/transaction/pay?id=#####&method=#####
+  // localhost:2000/transaction?id=#####&sku=#####|index=#####
   mux.HandleFunc("/transaction", handlers.TransactionGetAllHandler).Methods("GET")
   mux.HandleFunc("/transaction/new", handlers.TransactionNewHandler).Methods("GET")
   mux.HandleFunc("/transaction", handlers.TransactionAddDishHandler).Methods("POST")
   mux.HandleFunc("/transaction", handlers.TransactionDeleteDishHandler).Methods("DELETE")
   mux.HandleFunc("/transaction", handlers.TransactionServerHandler).Methods("PUT")
   mux.HandleFunc("/transaction/pay", handlers.TransactionPayHandler).Methods("POST")
-  //
+
+  // localhost:2000/server?server=##### (with json body)
   mux.HandleFunc("/server", handlers.ServerAddHandler).Methods("POST")
   mux.HandleFunc("/server", handlers.ServerDeleteHandler).Methods("DELETE")
 

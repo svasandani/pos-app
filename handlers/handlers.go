@@ -6,11 +6,17 @@ import (
   "io"
   "io/ioutil"
   "strconv"
+  "fmt"
 
   "github.com/svasandani/pos-app/menu"
   "github.com/svasandani/pos-app/server"
   "github.com/svasandani/pos-app/transaction"
 )
+
+func OptionsHandler(w http.ResponseWriter, r *http.Request) {
+  setupResponse(&w, r)
+  fmt.Println("hello")
+}
 
 func setupResponse(w *http.ResponseWriter, r *http.Request) {
 	  (*w).Header().Set("Access-Control-Allow-Origin", "*")
@@ -84,7 +90,8 @@ func MenuDeleteHandler(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  dish, err := convertHTTPToDish(r.Body)
+  s, err := strconv.ParseInt(r.FormValue("sku"), 10, 0)
+  sku := int(s)
 
   if err != nil {
     http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -92,7 +99,7 @@ func MenuDeleteHandler(w http.ResponseWriter, r *http.Request) {
 
   encoder := json.NewEncoder(w)
 
-  if err := encoder.Encode(menu.DeleteMenuItem(servername, dish.SKU)); err != nil {
+  if err := encoder.Encode(menu.DeleteMenuItem(servername, sku)); err != nil {
     http.Error(w, err.Error(), http.StatusInternalServerError)
   }
 }
@@ -184,15 +191,11 @@ func ServerDeleteHandler(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  serverobject, err := convertHTTPToServer(r.Body)
-
-  if err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
-  }
+  serverdeleted := r.FormValue("object")
 
   encoder := json.NewEncoder(w)
 
-  if err := encoder.Encode(server.RemoveServer(servername, serverobject.ID)); err != nil {
+  if err := encoder.Encode(server.RemoveServer(servername, serverdeleted)); err != nil {
     http.Error(w, err.Error(), http.StatusInternalServerError)
   }
 }
@@ -303,24 +306,24 @@ func TransactionPayHandler(w http.ResponseWriter, r *http.Request) {
   }
 }
 
-func convertHTTPToTransaction(httpBody io.ReadCloser) (transaction.Transaction, error) {
-  body, err := ioutil.ReadAll(httpBody)
-
-  if err != nil {
-    return transaction.Transaction{}, err
-  }
-
-  defer httpBody.Close()
-  return convertJSONToTransaction(body)
-}
-
-func convertJSONToTransaction(jsonBody []byte) (transaction.Transaction, error) {
-  var transactionitem transaction.Transaction
-  err := json.Unmarshal(jsonBody, &transactionitem)
-
-  if err != nil {
-    return transaction.Transaction{}, err
-  }
-
-  return transactionitem, nil
-}
+// func convertHTTPToTransaction(httpBody io.ReadCloser) (transaction.Transaction, error) {
+//   body, err := ioutil.ReadAll(httpBody)
+//
+//   if err != nil {
+//     return transaction.Transaction{}, err
+//   }
+//
+//   defer httpBody.Close()
+//   return convertJSONToTransaction(body)
+// }
+//
+// func convertJSONToTransaction(jsonBody []byte) (transaction.Transaction, error) {
+//   var transactionitem transaction.Transaction
+//   err := json.Unmarshal(jsonBody, &transactionitem)
+//
+//   if err != nil {
+//     return transaction.Transaction{}, err
+//   }
+//
+//   return transactionitem, nil
+// }

@@ -21,7 +21,7 @@ type Dish struct {
 
 var Menu []Dish
 var sku int = 0;
-var filename string = "./menu_output.txt"
+var filename string = "./menu/menu.csv"
 var mtx sync.RWMutex
 
 func init() {

@@ -1,0 +1,27 @@
+<div class="content-wrap">
+  <div class="card" *ngFor="let transaction of transactions; let id=index">
+    <h3>Transaction No. {{transaction.id}}</h3>
+    <label>Server: {{transaction.server}}</label>
+    <table>
+      <ul class="header">
+        <li>Dish</li>
+        <li>Price</li>
+        <li>Served</li>
+      </ul>
+      <ul *ngFor="let dish of dishlist[id]; let i=index">
+        <li>
+          {{dish.name}}
+        </li>
+        <li>
+          {{dish.price}}
+        </li>
+        <li>
+          {{transaction.completedlist[i]}}
+        </li>
+      </ul>
+    </table>
+    <div class="button">
+      Pay Now
+    </div>
+  </div>
+</div>

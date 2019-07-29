@@ -1,1 +1,148 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  text-align: center;
+  font-family: sans-serif;
+  margin-bottom: 0;
+  --primary-color: #186746;
+  --primary-color-lighter: #28f7a6;
+  --secondary-color: #9eb1ff;
+  --lighter: #eeeeee;
+  box-sizing: border-box;
+}
+
+html {
+  padding: 0;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.content-wrap {
+  max-width: 650px;
+  padding: 0 5%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  margin: 1.5rem;
+  margin-bottom: 0px;
+}
+
+h2 {}
+
+h3 {
+  color: #101010;
+  margin: 0;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+label {
+  color: #676767;
+  font-size: 0.8em;
+  margin-top: 0;
+  display: block;
+}
+
+.toolbar {
+  width: 100%;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 1fr 1fr;
+  height: 3.5rem;
+  margin-bottom: 1.5rem;
+  padding-top: 1.5rem;
+  box-shadow: 0px 4px 6px -6px;
+  position: sticky;
+  top: 0px;
+  background: white;
+}
+
+.tab {
+  font-weight: bold;
+  transition: 0.2s linear;
+}
+
+.tab:hover {
+  cursor: pointer;
+  transition: 0.2s linear;
+}
+
+.tab.active {
+  border-bottom: 4px solid var(--primary-color);
+  transition: 0.2s linear;
+}
+
+.button {
+  outline: none;
+  background: var(--lighter);
+  padding: 10px;
+  display: inline-block;
+  border-radius: 2px;
+  box-shadow: 0px 0px 9px -8px black;
+  color: var(--primary-color);
+  font-weight: bold;
+  transition: 0.1s linear;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.button:hover {
+  background: var(--primary-color);
+  color: var(--lighter);
+  cursor: pointer;
+  transition: 0.1s linear;
+}
+
+.card {
+  border-radius: 5px;
+  border: 1px solid lightgrey;
+  padding: 30px;
+  margin-bottom: 1.5rem;
+}
+
+table {
+  margin: 1em 0;
+  display: block;
+  text-align: left;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+table ul {
+  padding: 0;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid lightgrey;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-bottom: 0.5rem;
+}
+
+table ul li {
+  list-style: none;
+}
+
+table ul.header {
+  font-weight: bold;
+  color: var(--primary-color)
+}
+
+select {
+  padding: 10px;
+  outline: none;
+  appearance: none;
+  border: 0;
+  border-bottom: 4px solid var(--primary-color);
+  font-weight: bold;
+}
+
+select:hover {
+  cursor: pointer;
+}

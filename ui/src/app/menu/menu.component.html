@@ -1,0 +1,16 @@
+<div class="content-wrap">
+  <table>
+    <ul class="header">
+      <li>Dish</li>
+      <li>Price</li>
+    </ul>
+    <ul *ngFor="let dish of menu">
+      <li>
+        {{dish.name}}
+      </li>
+      <li>
+        {{dish.price}}
+      </li>
+    </ul>
+  </table>
+</div>
