@@ -79,7 +79,7 @@ func FindServerByName(name string) Server {
   return Server {ID: "", Name: "", Date: ""}
 }
 
-func AddNewServer(name string) string {
+func AddNewServer(servername string, name string) string {
   // mtx.Lock()
   // defer mtx.Unlock()
 
@@ -93,12 +93,12 @@ func AddNewServer(name string) string {
   writeServersToFile()
 
   action := fmt.Sprintf("Added new server %v", name)
-  poslog.Log("nil", action)
+  poslog.Log(servername, action)
 
   return id
 }
 
-func RemoveServer(id string) string {
+func RemoveServer(servername string, id string) string {
   // mtx.Lock()
   // defer mtx.Unlock()
 
@@ -113,7 +113,7 @@ func RemoveServer(id string) string {
   writeServersToFile()
 
   action := fmt.Sprintf("Deleted server %v", name)
-  poslog.Log("nil", action)
+  poslog.Log(servername, action)
 
   return name
 }

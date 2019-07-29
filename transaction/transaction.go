@@ -73,6 +73,10 @@ func writeTransactionToDisk(transactionid string) {
 //   return Transaction {ID: xid.New().String(), Date: time.Now().Format("Jan-02-2006 3:04:05 PM"), Server: "", Payment_method: "", SKUList: []int{}, CompletedList: []bool{}, Total: 0}
 // }
 
+func GetAll() []Transaction {
+  return transactionList
+}
+
 func NewTransaction(servername string) string {
   id := xid.New().String()
 

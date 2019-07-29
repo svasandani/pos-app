@@ -18,7 +18,8 @@ func main() {
   mux.HandleFunc("/menu", handlers.MenuDeleteHandler).Methods("DELETE")
   mux.HandleFunc("/menu", handlers.MenuEditHandler).Methods("PUT")
 
-  mux.HandleFunc("/transaction", handlers.TransactionNewHandler).Methods("GET")
+  mux.HandleFunc("/transaction", handlers.TransactionGetAllHandler).Methods("GET")
+  mux.HandleFunc("/transaction/new", handlers.TransactionNewHandler).Methods("GET")
   mux.HandleFunc("/transaction", handlers.TransactionAddDishHandler).Methods("POST")
   mux.HandleFunc("/transaction", handlers.TransactionDeleteDishHandler).Methods("DELETE")
   mux.HandleFunc("/transaction", handlers.TransactionServerHandler).Methods("PUT")

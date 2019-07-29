@@ -149,6 +149,15 @@ func ServerAddHandler(w http.ResponseWriter, r *http.Request) {
   setupResponse(&w, r)
   defer r.Body.Close()
 
+  serverid := r.FormValue("server")
+
+  servername := server.CheckServer(serverid)
+
+  if servername == "" {
+    http.Error(w, "Server not found", http.StatusUnauthorized)
+    return
+  }
+
   serverobject, err := convertHTTPToServer(r.Body)
 
   if err != nil {
@@ -157,7 +166,7 @@ func ServerAddHandler(w http.ResponseWriter, r *http.Request) {
 
   encoder := json.NewEncoder(w)
 
-  if err := encoder.Encode(server.AddNewServer(serverobject.Name)); err != nil {
+  if err := encoder.Encode(server.AddNewServer(servername, serverobject.Name)); err != nil {
     http.Error(w, err.Error(), http.StatusInternalServerError)
   }
 }
@@ -166,6 +175,15 @@ func ServerDeleteHandler(w http.ResponseWriter, r *http.Request) {
   setupResponse(&w, r)
   defer r.Body.Close()
 
+  serverid := r.FormValue("server")
+
+  servername := server.CheckServer(serverid)
+
+  if servername == "" {
+    http.Error(w, "Server not found", http.StatusUnauthorized)
+    return
+  }
+
   serverobject, err := convertHTTPToServer(r.Body)
 
   if err != nil {
@@ -174,7 +192,7 @@ func ServerDeleteHandler(w http.ResponseWriter, r *http.Request) {
 
   encoder := json.NewEncoder(w)
 
-  if err := encoder.Encode(server.RemoveServer(serverobject.ID)); err != nil {
+  if err := encoder.Encode(server.RemoveServer(servername, serverobject.ID)); err != nil {
     http.Error(w, err.Error(), http.StatusInternalServerError)
   }
 }
@@ -199,6 +217,16 @@ func convertJSONToServer(jsonBody []byte) (server.Server, error) {
   }
 
   return serveritem, nil
+}
+
+func TransactionGetAllHandler(w http.ResponseWriter, r *http.Request) {
+  setupResponse(&w, r)
+
+  encoder := json.NewEncoder(w)
+
+  if err := encoder.Encode(transaction.GetAll()); err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
 }
 
 func TransactionNewHandler(w http.ResponseWriter, r *http.Request) {
